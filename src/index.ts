@@ -10,56 +10,58 @@ const validator = (
   signature: Buffer,
 ): boolean => ECPair.fromPublicKey(pubkey).verify(msghash, signature);
 
-// input json type info
+/**
+ * input json type info
+ */
 type TxInput = {
   transactionId: string,
   transactionIndex: number,
   sequence: number
   utxo: string,
   wif: string,
-}
+};
 
 type TxOutput = {
   address: string,
   value: number,
-}
+};
 
 type Param = {
+  testnet: boolean,
   version: number,
   locktime: number,
-  testnet: boolean,
   input: TxInput[],
   output: TxOutput[],
-}
+};
 
 /**
  * make transaction from Param, return hex
  */
 const makeTransaction = (param: Param) => {
   const network = param.testnet ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
-  const psbt = new bitcoin.Psbt({ network: network });
+  const psbt = new bitcoin.Psbt({ network });
 
   psbt.setVersion(param.version);
   psbt.setLocktime(param.locktime);
 
-  for (let index = 0; index < param.input.length; index++) {
+  for (const input of param.input) {
     psbt.addInput({
-      hash: param.input[index].transactionId,
-      index: param.input[index].transactionIndex,
-      sequence: param.input[index].sequence,
-      nonWitnessUtxo: Buffer.from(param.input[index].utxo, 'hex')
+      hash: input.transactionId,
+      index: input.transactionIndex,
+      sequence: input.sequence,
+      nonWitnessUtxo: Buffer.from(input.utxo, 'hex')
     });
   }
 
-  for (let index = 0; index < param.output.length; index++) {
+  for (const output of param.output) {
     psbt.addOutput({
-      address: param.output[index].address,
-      value: param.output[index].value,
+      address: output.address,
+      value: output.value,
     });
   }
 
-  for (let index = 0; index < param.input.length; index++) {
-    const pair = ECPair.fromWIF(param.input[index].wif, network);
+  for (const [index, input] of param.input.entries()) {
+    const pair = ECPair.fromWIF(input.wif, network);
     psbt.signInput(index, pair);
   }
 
