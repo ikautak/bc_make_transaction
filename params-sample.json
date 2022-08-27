@@ -1,0 +1,20 @@
+{
+    "testnet": true,
+    "version": 1,
+    "locktime": 0,
+    "input": [
+        {
+            "transactionId": "xxx",
+            "transactionIndex": 0,
+            "sequence": 4294967295,
+            "utxo": "xxx",
+            "wif": "xxx"
+        }
+    ],
+    "output": [
+        {
+            "address": "xxx",
+            "value": 1000
+        }
+    ]
+}
