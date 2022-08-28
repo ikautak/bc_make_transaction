@@ -2,7 +2,7 @@
     "testnet": true,
     "version": 1,
     "locktime": 0,
-    "input": [
+    "inputs": [
         {
             "transactionId": "xxx",
             "transactionIndex": 0,
@@ -11,7 +11,7 @@
             "wif": "xxx"
         }
     ],
-    "output": [
+    "outputs": [
         {
             "address": "xxx",
             "value": 1000

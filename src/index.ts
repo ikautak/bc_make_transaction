@@ -30,8 +30,8 @@ type Param = {
   testnet: boolean,
   version: number,
   locktime: number,
-  input: TxInput[],
-  output: TxOutput[],
+  inputs: TxInput[],
+  outputs: TxOutput[],
 };
 
 /**
@@ -44,7 +44,7 @@ const makeTransaction = (param: Param) => {
   psbt.setVersion(param.version);
   psbt.setLocktime(param.locktime);
 
-  for (const input of param.input) {
+  for (const input of param.inputs) {
     psbt.addInput({
       hash: input.transactionId,
       index: input.transactionIndex,
@@ -53,14 +53,14 @@ const makeTransaction = (param: Param) => {
     });
   }
 
-  for (const output of param.output) {
+  for (const output of param.outputs) {
     psbt.addOutput({
       address: output.address,
       value: output.value,
     });
   }
 
-  for (const [index, input] of param.input.entries()) {
+  for (const [index, input] of param.inputs.entries()) {
     const pair = ECPair.fromWIF(input.wif, network);
     psbt.signInput(index, pair);
   }
