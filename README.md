@@ -1,4 +1,4 @@
-# bc_make_transaction
+# btc_make_tx
 
 ```sh
 npx tsc
